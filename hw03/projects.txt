@@ -1,0 +1,11 @@
+To: Prof. Mark A. Yoder
+
+From: Mohit Sharma and Tushar Jain
+
+Date: 3rd Sept'15
+
+Subject: Project Ideas
+
+1. Facebook Like Counter 
+2. Video Capture and Image Processing
+3. Temperature Sensor 
