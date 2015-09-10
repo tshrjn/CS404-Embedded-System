@@ -1,0 +1,221 @@
+
+var curses = require('../curses')
+,	util = require('util')
+
+,	stdwin = curses.initscr()
+,	maxyx = curses.getmaxyx(stdwin)
+
+,	DEFAULT_OPTIONS = {
+		title : "Title",
+		message : "A custom message."
+	}
+	
+,	CP_DLG_CONTENT	= 1 // dialog contents
+,	CP_DLG_SHADOW	= 2 // dialog shadow
+,	CP_DLG_BORDER	= 3 // dialog border
+,	CP_DLG_TITLE	= 4 // dialog title
+
+,	CP_LBL_CONTENT	= 5 // label message
+
+,	CP_INP_CONTENT	= 6 // input box contents
+,	CP_INP_BORDER	= 7 // input box border
+
+,	CP_MAP = [
+		null,
+		
+		[curses.COLOR_YELLOW, curses.COLOR_BLUE, curses.A_NORMAL],
+		[curses.COLOR_BLACK, curses.COLOR_BLACK, curses.A_NORMAL],
+		[curses.COLOR_YELLOW, curses.COLOR_BLUE, curses.A_NORMAL],
+		[curses.COLOR_YELLOW, curses.COLOR_BLUE, curses.A_BOLD],
+		
+		[curses.COLOR_WHITE, curses.COLOR_BLUE, curses.A_NORMAL],
+		
+		[curses.COLOR_WHITE, curses.COLOR_BLACK, curses.A_BOLD],
+		[curses.COLOR_YELLOW, curses.COLOR_BLACK, curses.A_NORMAL]
+	]
+
+;
+
+/* cleanup on exit */
+process.on('exit', function () {
+	curses.endwin();
+});
+
+/* initialize colors from above map */
+if (curses.has_colors()) {
+	curses.start_color();
+	for (var cp=1; cp<CP_MAP.length; cp++) {
+		curses.init_pair(cp, CP_MAP[cp][0], CP_MAP[cp][1]);
+	}
+}
+
+/* clear the window */
+curses.wclear(stdwin);
+curses.wrefresh(stdwin);
+
+/* currently half of the screen */
+function calculate_size (_title, _message) {
+	return {
+		width : maxyx.x/2,
+		height : maxyx.y/2
+	};
+}
+
+/* centered on screen */
+function calculate_center_pos (_title, _message, _size) {
+	return {
+		x : maxyx.x/2 - _size.width/2,
+		y : maxyx.y/2 - _size.height/2
+	};
+}
+
+/* an input dialog with title and message */
+function InputUI (options) {
+	if (!(this instanceof InputUI)) return new InputUI(options);
+	var _self = this
+	
+	,	_options = options || DEFAULT_OPTIONS
+	
+	/* the dialog title */
+	,	_title = _options.title || DEFAULT_OPTIONS.title
+	
+	/* the message or a question */
+	,	_message = _options.message || DEFAULT_OPTIONS.message
+	
+	/* dialog dimension/position */
+	,	_size = _options.size || calculate_size(_title, _message)
+	,	_pos = _options.pos || calculate_center_pos(_title, _message, _size)
+	
+	/* callbacks to be called when user is ready with input */
+	,	_okay = _options.okay || function () {}
+	,	_cancel = _options.cancel || function () {}
+	
+	/* references to the layout windows */
+	,	_dlg = {}
+	,	_lbl = {}
+	,	_inp = {}
+	;
+	
+	/* initialize dialog */
+	_dlg.isDirty = true;
+	_dlg.shadow = curses.subwin(stdwin, _size.height, _size.width, _pos.y+1, _pos.x+1);
+	_dlg.border = curses.subwin(stdwin, _size.height, _size.width, _pos.y, _pos.x);
+	_dlg.content = curses.derwin(_dlg.border, _size.height-2, _size.width-2, 1, 1);
+	function _dlg_repaint() {
+		if (_dlg.isDirty) {
+			curses.wbkgd(_dlg.shadow, curses.color_pair(CP_DLG_SHADOW)|CP_MAP[CP_DLG_SHADOW][2])
+			curses.wclear(_dlg.shadow);
+			curses.wnoutrefresh(_dlg.shadow);
+			
+			curses.wbkgd(_dlg.border, curses.color_pair(CP_DLG_BORDER)|CP_MAP[CP_DLG_BORDER][2])
+			curses.wclear(_dlg.border);
+			curses.box(_dlg.border, 0, 0);
+			curses.wmove(_dlg.border, 0, 2);
+			curses.waddstr(_dlg.border, '[ '+_title+' ]');
+			curses.wnoutrefresh(_dlg.border);
+			
+			curses.wbkgd(_dlg.content, curses.color_pair(CP_DLG_CONTENT)|CP_MAP[CP_DLG_CONTENT][2])
+			curses.wclear(_dlg.content);
+			curses.wnoutrefresh(_dlg.content);
+			
+			_dlg.isDirty = false;
+		}
+	}
+	
+	/* initialize message label */
+	_lbl.isDirty = true;
+	_lbl.content = curses.derwin(_dlg.content, 15, _size.width-4, 1, 1);
+	function _lbl_repaint() {
+		if (_lbl.isDirty) {
+			curses.wbkgd(_lbl.content, curses.color_pair(CP_LBL_CONTENT)|CP_MAP[CP_LBL_CONTENT][2])
+			curses.wclear(_lbl.content);
+			curses.waddstr(_lbl.content, _message);
+			curses.wnoutrefresh(_lbl.content);
+			_lbl.isDirty = false;
+		}
+	}
+	
+	/* initialize input box */
+	_inp.isDirty = true;
+	_inp.border = curses.derwin(_dlg.content, _size.height-15-4, _size.width-4, 10, 1);
+	_inp.content = curses.derwin(_inp.border, _size.height-15-6, _size.width-6, 1, 1);
+	function _inp_repaint() {
+		if (_inp.isDirty) {
+			curses.wbkgd(_inp.border, curses.color_pair(CP_INP_BORDER)|CP_MAP[CP_INP_BORDER][2]);
+			curses.wclear(_inp.border);
+			curses.box(_inp.border, 0, 0);
+			curses.wnoutrefresh(_inp.border);
+			
+			curses.wbkgd(_inp.content, curses.color_pair(CP_INP_CONTENT)|CP_MAP[CP_INP_CONTENT][2]);
+			curses.wclear(_inp.content);
+			curses.wnoutrefresh(_inp.content);
+			_lbl.isDirty = false;
+		}
+	}
+	
+	/* provide access to dialog elements... */
+	
+	this.__defineGetter__('dlg', function () {
+		return _dlg;
+	});
+	
+	this.__defineGetter__('lbl', function () {
+		return _lbl;
+	});
+	
+	this.__defineGetter__('inp', function () {
+		return _inp;
+	});
+	
+	/* repaint the dialog */
+	this.repaint = function () {
+		
+		_dlg_repaint();
+		_lbl_repaint();
+		_inp_repaint();
+		
+	};
+	
+}
+util.inherits(InputUI, Object);
+
+InputUI.prototype.show = function () {
+	var buffer = "";
+	curses.wmove(this.inp.content, 0, 0);
+	this.inp.isDirty = true;
+	this.repaint();
+	curses.keypad(this.inp.content, false);
+	curses.nodelay(this.inp.content, false);
+	curses.scrollok(this.inp.content, true);
+	curses.echo();
+	curses.nocbreak();
+	while ((c = curses.wgetch(this.inp.content)) != '\n'.charCodeAt(0)) {
+		if (c != -1) {
+			buffer += String.fromCharCode(c);
+			this.inp.isDirty = true;
+		}
+	}
+	curses.cbreak();
+	return buffer;
+};
+
+exports = module.exports = InputUI;
+
+var input = new InputUI()
+,	output = ""
+;
+
+
+setInterval(function update() {
+	input.repaint();
+	curses.doupdate();
+}, 100);
+
+output = input.show();
+curses.waddstr(input.lbl.content, '\n'+output+'\n');
+curses.wnoutrefresh(input.lbl.content);
+
+setTimeout(function update() {
+	process.exit(0);
+}, 5000);
+
