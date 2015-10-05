@@ -1,3 +1,9 @@
+// Comment by Mark A. Yoder
+// Looks good. 
+// I don't see project information or answers to memory map questions.
+// See comment about system() below
+// Grade: 10/25
+
 // From : http://stackoverflow.com/questions/13124271/driving-beaglebone-gpio-through-dev-mem
 // Read from 2 swtch on different gpio ports and control an LED respectively using mmap.
 // Be sure to have beaglebone_gpio.h in the current directort.
@@ -38,6 +44,9 @@ void signal_handler(int sig)
  * Main Function
  ****************************************************************/
 
+/* Comment by Mark A. Yoder
+* What are these for?
+*/
 int main(int argc, char *argv[]){
 	system("bone_eqep1b > /sys/devices/bone_capemgr.*/slots");
 	system("bone_eqep2b > /sys/devices/bone_capemgr.*/slots");
