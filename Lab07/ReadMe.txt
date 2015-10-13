@@ -4,4 +4,5 @@ From: Tushar Jain
 
 Date: 10rd Sept'15
 
-Subject: Lab 3 - Tinkering & tweaking with gy-521
+Subject: Lab 7 - Tinkering & tweaking with gy-521
+
