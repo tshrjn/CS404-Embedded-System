@@ -26,7 +26,7 @@
  * Global variables
  ****************************************************************/
 
-int keepgoing = 0;
+int keepgoing = 1;
 
 /****************************************************************
  * signal_handler
@@ -48,8 +48,8 @@ void signal_handler(int sig)
 * What are these for?
 */
 int main(int argc, char *argv[]){
-	system("bone_eqep1b > /sys/devices/bone_capemgr.*/slots");
-	system("bone_eqep2b > /sys/devices/bone_capemgr.*/slots");
+	//system("bone_eqep1b > /sys/devices/bone_capemgr.*/slots");
+	//system("bone_eqep2b > /sys/devices/bone_capemgr.*/slots");
 /****************************************************************
  * Local variables
  ****************************************************************/
@@ -86,7 +86,7 @@ gpio_addr1 = mmap(0,GPIO1_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO1_ST
 gpio_cleardataout_addr0 = gpio_addr0 + GPIO_CLEARDATAOUT;
 gpio_cleardataout_addr1 = gpio_addr1 + GPIO_CLEARDATAOUT;
 
-printf("Still going!\n");
+//printf("Still going!\n");
 
 	// Set the signal callback for Ctrl-C
 	signal(SIGINT, signal_handler);
@@ -102,17 +102,17 @@ printf("Still going!\n");
 	*gpio_oe_addr0 &= ~USR0;
 	*gpio_oe_addr1 &= GPIO_40;
 	*gpio_oe_addr1 &= ~USR3;
-	printf("At While!\n");
+	//printf("At While!\n");
 	while(keepgoing) {
-		printf("While!!\n");
+		//printf("While!!\n");
 		if(*gpio_datain_addr0 & GPIO_03) {
-			printf("Stuffs hit 1!\n");
+			//printf("Stuffs hit 1!\n");
 			*gpio_setdataout_addr0 = USR0;
 		} else {
 			*gpio_cleardataout_addr0 = USR0;
 		}
 		if(*gpio_datain_addr1 & GPIO_40) {
-			printf("Stuffs hit 2!\n");
+			// printf("Stuffs hit 2!\n");
 			*gpio_setdataout_addr1 = USR3;
 		} else {
 			*gpio_cleardataout_addr1 = USR3;

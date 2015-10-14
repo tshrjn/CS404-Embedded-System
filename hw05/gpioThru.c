@@ -62,8 +62,8 @@ int main(int argc, char *argv[]) {
     printf("GPIO SETDATAOUTADDR mapped to %p\n", gpio_setdataout_addr);
     printf("GPIO CLEARDATAOUT mapped to %p\n", gpio_cleardataout_addr);
 
-    *gpio_oe_addr0 &= GPIO_03;
-	*gpio_oe_addr0 &= ~GPIO_07;    
+ //    *gpio_oe_addr0 &= GPIO_03;
+	// *gpio_oe_addr0 &= ~GPIO_07;    
 
     printf("Button at GPIO_03 controls LED at GPIO_07\n");
     while(keepgoing) {
