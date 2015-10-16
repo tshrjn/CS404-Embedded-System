@@ -6,7 +6,7 @@
 
 // From : http://stackoverflow.com/questions/13124271/driving-beaglebone-gpio-through-dev-mem
 // Read from 2 swtch on different gpio ports and control an LED respectively using mmap.
-// Be sure to have beaglebone_gpio.h in the current directort.
+// Be sure to have beaglebone_gpio.h in the current directory.
 //  by Tushar Jain  28-Sept-2015
 
 /****************************************************************
