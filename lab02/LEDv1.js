@@ -11,7 +11,7 @@ var LED2 = 'P9_14';
 b.pinMode( buttton1, b.INPUT);
 b.pinMode( button2, b.INPUT);
 
-//Output Pins
+//Seting up LEDs as Output pins
 b.pinMode(LED1, b.OUTPUT);
 b.pinMode(LED2, b.OUTPUT);
 
