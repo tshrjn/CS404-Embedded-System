@@ -1,3 +1,18 @@
+# Comments from Mark A. Yoder
+
+5  4 buttons and LEDs
+5  Etch-a-sketch
+5   Combine buttons and Etch-a-sketch
+5   Extras
+5   ReadMe.txt
+-5  Late
+
+Grade 20/25
+
+Looks good, thought I get an error on your LEDsviaInterrupt.js.
+
+------------------------------------------------
+
 Contents
 --------
 This folder contains the following files:
