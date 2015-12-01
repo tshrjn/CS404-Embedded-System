@@ -8,7 +8,7 @@ var LED1 = 'P9_13';
 var LED2 = 'P9_14';
 
 //Seting up buttons as Input pins
-b.pinMode( buttton1, b.INPUT);
+b.pinMode( button1, b.INPUT);
 b.pinMode( button2, b.INPUT);
 
 //Seting up LEDs as Output pins
@@ -19,8 +19,8 @@ setInterval(check,100);
 
 function check(){
 
-b.digitalRead( buttton1, glow1);
-b.digitalRead( buttton1, glowBoth);
+b.digitalRead( button1, glow1);
+b.digitalRead( button1, glowBoth);
 
 b.digitalRead( button2, glow1);
 b.digitalRead( button2, glowBoth);

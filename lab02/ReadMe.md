@@ -1,4 +1,18 @@
-#Lab-02
+# Comments from Mark A. Yoder
+
+5 blinkled.js
+5 input.js
+4 some variation
+5 ReadMe.txt
+5 Not late
+
+Grade:  25/25
+
+Looks good, though LEDv1.js has a typo.
+
+========================================
+
+Lab-02
 
 To:   Mark A. Yoder
 From :    Tushar Jain(B13236)
