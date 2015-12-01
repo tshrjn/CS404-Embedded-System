@@ -1,0 +1,39 @@
+
+1. Visit https://www.debian.org/releases/  to find the current stable, testing and unstable realeases.
+
+Current Stable Version: Jessie i.e. Debian 8
+Current testing version: Stretch
+Current unstable version (named as always): Sid
+
+2. Use apt-cache pkgnames to see how many packages are available to install.
+Code : apt-cache pkgnames | wc -l 
+Output: 36685.
+Thus 36685 packages are available to install right now.
+
+3. Install htop and find what version was installed.
+Code : sudo apt-get install htop 
+Code : htop -v
+Output: 
+htop 1.0.1 - (C) 2004-2011 Hisham Muhammad
+Released under the GNU GPL.
+
+4.Follow the directions from class to add the Jessie release packages.  List what you do.
+Code:
+echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list
+echo "deb http://ftp.us.debian.org/debian/ wheezy-backports main" > /etc/apt/sources.list.d/wheezy-backports.list
+apt-get update
+
+
+5.Use apt-get pkgnames again to see how many packages are now available to install.
+Code : apt-cache pkgnames | wc -l 
+Output: 48748 
+This implies now 48748 packages are avialable.
+48748 - 36685 = 12063 packages are now available in Jessie released Packages!
+
+6.Install  the Jessie release of htop and find what version was installed.
+Code : sudo apt-get install htop 
+Code : htop -v
+Output: 
+htop 1.0.3-1 - (C) 2004-2014 Hisham Muhammad
+Released under the GNU GPL.
+
