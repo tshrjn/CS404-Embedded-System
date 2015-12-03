@@ -8,8 +8,9 @@ To work with LKMs (Loadable Kernel Modules).
 
 
 ##Set-Up
- Setup instructions can be obtained from Derek Molloy's blog:
- http://derekmolloy.ie/writing-a-linux-kernel-module-part-1-introduction/
+ Setup instructions can be obtained from [Derek Molloy's blog]
+
+ [Derek Molloy's blog]: http://derekmolloy.ie/writing-a-linux-kernel-module-part-1-introduction/
 
 ## Lab Steps
 The LKM was loaded onto the BeagleBone and output was tested and recorded in /var/ker.log.
