@@ -22,7 +22,7 @@ Then Makefile has been also modified for hello2.c
 
 This was done late as I was having issues with loading the LKM.
 Eg :-
-  *The path to LKM should not have directory name having spaces.
+* The path to LKM should not have directory name having spaces.
 
  
 Since we were completely new to messing around with kernel files and modules, it was something difficult for us.
